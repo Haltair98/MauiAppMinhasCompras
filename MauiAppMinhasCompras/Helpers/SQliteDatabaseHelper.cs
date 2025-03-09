@@ -23,7 +23,7 @@ namespace MauiAppMinhasCompras.Helpers
             string sql = "UPDATE Produto SET Descricao=?, Quantidade =?, Preco=? WHERE id=?";
 
             return _conn.QueryAsync<Produto>(
-                sql, p.Descricao, p.Quantidade, p.preco, p.Id
+                sql, p.Descricao, p.Quantidade, p.Preco, p.Id
             );
         }
 
