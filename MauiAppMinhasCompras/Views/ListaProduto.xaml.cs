@@ -17,6 +17,9 @@ public partial class ListaProduto : ContentPage
 
     protected async override void OnAppearing()
     {
+        base.OnAppearing();
+
+        // Carrega todos os produtos inicialmente
         List<Produto> tmp = await App.Db.GetAll();
 
 		tmp.ForEach( i => lista.Add(i));
@@ -35,14 +38,23 @@ public partial class ListaProduto : ContentPage
 
     private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
     {
-		string q = e.NewTextValue;
+        string query = e.NewTextValue?.ToLower(); // Obtém o texto da busca em minúsculo
 
-		lista .Clear();
+        // Limpa a lista de produtos antes de buscar os resultados filtrados
+        lista.Clear();
 
-        List<Produto> tmp = await App.Db.Search(q);
-
-        tmp.ForEach(i => lista.Add(i));
-
+        if (string.IsNullOrEmpty(query))
+        {
+            // Se o texto da busca estiver vazio, carrega todos os produtos
+            List<Produto> tmp = await App.Db.GetAll();
+            tmp.ForEach(i => lista.Add(i));
+        }
+        else
+        {
+            // Caso contrário, faz a busca filtrada com a consulta digitada
+            List<Produto> tmp = await App.Db.Search(query);
+            tmp.ForEach(i => lista.Add(i));
+        }
     }
 
     private void ToolbarItem_Clicked_1(object sender, EventArgs e)

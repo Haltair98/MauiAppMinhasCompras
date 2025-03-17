@@ -47,5 +47,6 @@ namespace MauiAppMinhasCompras.Helpers
         {
             throw new NotImplementedException();
         }
+
     }
 }
