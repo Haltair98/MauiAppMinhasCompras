@@ -17,12 +17,18 @@ public partial class ListaProduto : ContentPage
 
     protected async override void OnAppearing()
     {
-        base.OnAppearing();
+        try
+        {
+            lista.Clear();
+            // Carrega todos os produtos inicialmente
+            List<Produto> tmp = await App.Db.GetAll();
 
-        // Carrega todos os produtos inicialmente
-        List<Produto> tmp = await App.Db.GetAll();
-
-		tmp.ForEach( i => lista.Add(i));
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "Ok");
+        }
     }
 
     private void ToolbarItem_Clicked(object sender, EventArgs e)
