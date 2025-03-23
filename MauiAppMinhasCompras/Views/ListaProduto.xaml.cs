@@ -66,9 +66,43 @@ public partial class ListaProduto : ContentPage
 		DisplayAlert("Total dos Produtos", msg,"ok");
     }
 
-    private void MenuItem_Clicked(object sender, EventArgs e)
+    private async void MenuItem_Clicked(object sender, EventArgs e)
     {
+        try
+        {
+            MenuItem selecionado = sender as MenuItem;
 
+            Produto p = selecionado.BindingContext as Produto;
 
+            bool confirm = await DisplayAlert(
+                "Tem certeza?", $"Remover Produto {p.Descricao}?", "Sim", "Não");
+            if (confirm)
+            {
+                await App.Db.Delete(p.Id);
+                lista.Remove(p);
+            }
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Ops", ex.Message, "ok");
+        }
+
+    }
+
+    private void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        try
+        {
+            Produto p = e.SelectedItem as Produto;
+
+            Navigation.PushAsync(new Views.EditarProduto
+            {
+                BindingContext = p,
+            });
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Ops", ex.Message, "ok");
+        }
     }
 }
